@@ -1,0 +1,64 @@
+// see also: https://eslint.org/docs/user-guide/configuring
+{
+  "ignorePatterns": ["/lib/"],
+
+  // config common to all
+  "env": {
+    "es6": true,
+    "es2017": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module"
+  },
+
+  "overrides": [
+    // all files to be preformatted
+    {
+      "files": ["**/*.js", "lib/**/*.d.ts"],
+      "rules": {
+        "lines-around-comment": [
+          "error",
+          {
+            "beforeBlockComment": true,
+            "beforeLineComment": true,
+            "allowBlockStart": true,
+            "allowObjectStart": true,
+            "allowArrayStart": true,
+            "allowClassStart": true
+          }
+        ]
+      }
+    },
+
+    // all TypeScript files
+    {
+      "files": ["**/*.ts"],
+      "plugins": ["@typescript-eslint"],
+      "parser": "@typescript-eslint/parser"
+    },
+
+    // basic rules
+    {
+      "files": ["src/**/*.ts"],
+      "extends": ["eslint:recommended", "prettier"]
+    },
+
+    // rules for source code in TypeScript
+    {
+      "files": ["src/**/*.ts"],
+      "parserOptions": { "project": "tsconfig.json" },
+      "plugins": ["total-functions"],
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:total-functions/recommended",
+        "prettier/@typescript-eslint"
+      ],
+      "rules": {
+        "no-fallthrough": "off" // already checked by TypeScript
+      }
+    }
+  ]
+}
