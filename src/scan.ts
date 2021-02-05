@@ -51,11 +51,19 @@ export const scan = (
           case 1:
             continue;
           case 2:
-            if (scanEqualSeaparated(arg, argLen, options)) continue;
             // eslint-disable-next-line total-functions/no-unsafe-type-assertion
-            currentParameterContainer = options[arg[2] as string] ??= [];
+            currentParameterContainer = options[arg[1] as string] ??= [];
             continue;
           default:
+            if (arg.charCodeAt(2) === 61) {
+              // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+              const name = arg[1] as string;
+              const option = options[name];
+              const value = arg.substring(3);
+              if (option === undefined) options[name] = [value];
+              else option.push(value);
+              continue;
+            }
             // eslint-disable-next-line total-functions/no-unsafe-type-assertion
             for (let i = 2; i < argLen; ++i) options[arg[i] as string] ??= [];
             continue;
