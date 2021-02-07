@@ -2,7 +2,20 @@ import { scan } from "../lib/scan.js";
 
 console.log(
   scan(
-    ["command", "--foo", "-f", "--outfile", "a.ts", "--bar", "omg"],
-    (name) => name === "outfile"
+    [
+      "command",
+      "--foo",
+      "-a",
+      "some value",
+      "-s=src.ts",
+      "--outdir=dist",
+      "--outfile",
+      "out.js",
+      "--bar",
+      "omg",
+      "--",
+      "-valueWithHyphen",
+    ],
+    (name) => name !== "bar"
   )
 );
