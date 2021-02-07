@@ -1,19 +1,23 @@
-const scanEqualSeaparated = (
-  arg: string,
-  argLen: number,
-  options: Record<string, string[]>
+const addOptionValue = (
+  options: Record<string, string[]>,
+  name: string,
+  value: string
 ) => {
-  for (let i = 3; i < argLen; ++i) {
-    if (arg.charCodeAt(i) !== 61) continue;
+  const option = options[name];
+  if (option === undefined) options[name] = [value];
+  else option.push(value);
+};
 
-    const name = arg.substring(2, i);
-    const value = arg.substring(i + 1);
-    const option = options[name];
-    if (option === undefined) options[name] = [value];
-    else option.push(value);
-    return true;
-  }
-  return false;
+const findCharCode = (
+  str: string,
+  charCode: number,
+  start: number,
+  end: number
+): number => {
+  for (let i = start; i < end; i += 1)
+    if (str.charCodeAt(i) === charCode) return i;
+
+  return -1;
 };
 
 export const scan = (
@@ -22,56 +26,73 @@ export const scan = (
 ): Readonly<Record<string, readonly string[]>> => {
   const parameters: string[] = [];
   const options: Record<string, string[]> = { _: parameters };
-  let currentParameterContainer = parameters;
+  let currentValueContainer = parameters;
 
-  const len = args.length;
-  for (let argIndex = 0; argIndex < len; ++argIndex) {
+  const argsLen = args.length;
+  for (let argIndex = 0; argIndex < argsLen; argIndex += 1) {
     // eslint-disable-next-line total-functions/no-unsafe-type-assertion
     const arg = args[argIndex] as string;
 
-    if (arg.charCodeAt(0) === /* hyphen */ 45) {
-      const argLen = arg.length;
-      if (arg.charCodeAt(1) === /* hyphen */ 45) {
-        if (argLen === 2) {
-          for (let i = argIndex + 1; i < len; ++i) {
+    // Either a parameter or an option value
+    if (arg.charCodeAt(0) !== /* hyphen */ 45) {
+      currentValueContainer.push(arg);
+      currentValueContainer = parameters;
+      continue;
+    }
+
+    const argLen = arg.length;
+
+    switch (argLen) {
+      // bare single hyphen
+      case 1:
+        continue;
+
+      case 2:
+        // bare double hyphens
+        if (arg.charCodeAt(1) === /* hyphen */ 45) {
+          for (let i = argIndex + 1; i < argsLen; i += 1) {
             // eslint-disable-next-line total-functions/no-unsafe-type-assertion
             parameters.push(args[i] as string);
           }
-          break;
+          return options;
         }
-        if (scanEqualSeaparated(arg, argLen, options)) continue;
-        const optionName = arg.slice(2);
-        if (maybeValueAfterSpace(optionName))
-          currentParameterContainer = options[optionName] ??= [];
-        else options[optionName] ??= [];
-      } else {
-        switch (argLen) {
-          case 0:
-            continue;
-          case 1:
-            continue;
-          case 2:
-            // eslint-disable-next-line total-functions/no-unsafe-type-assertion
-            currentParameterContainer = options[arg[1] as string] ??= [];
-            continue;
-          default:
-            if (arg.charCodeAt(2) === 61) {
-              // eslint-disable-next-line total-functions/no-unsafe-type-assertion
-              const name = arg[1] as string;
-              const option = options[name];
-              const value = arg.substring(3);
-              if (option === undefined) options[name] = [value];
-              else option.push(value);
-              continue;
-            }
-            // eslint-disable-next-line total-functions/no-unsafe-type-assertion
-            for (let i = 2; i < argLen; ++i) options[arg[i] as string] ??= [];
-            continue;
+        // just a short option name
+        else {
+          currentValueContainer = options[arg.charAt(1)] ??= [];
+          continue;
         }
+    }
+
+    // Option with single hyphen
+    if (arg.charCodeAt(1) !== /* hyphen */ 45) {
+      // short option with equal-separated value
+      if (arg.charCodeAt(2) === /* equal */ 61) {
+        addOptionValue(options, arg.charAt(1), arg.substring(3));
+        continue;
       }
-    } else {
-      currentParameterContainer.push(arg);
-      currentParameterContainer = parameters;
+
+      // multiple short option names
+      for (let i = 1; i < argLen; i += 1) options[arg.charAt(i)] ??= [];
+      continue;
+    }
+    // Option with double hyphens
+    else {
+      const equalIndex = findCharCode(arg, /* equal */ 61, 3, argLen);
+
+      // long option with equal-separated value
+      if (equalIndex !== -1) {
+        addOptionValue(
+          options,
+          arg.substring(2, equalIndex),
+          arg.substring(equalIndex + 1)
+        );
+        continue;
+      }
+
+      // just a long option name
+      const optionName = arg.slice(2);
+      const option = (options[optionName] ??= []);
+      if (maybeValueAfterSpace(optionName)) currentValueContainer = option;
     }
   }
 
