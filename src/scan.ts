@@ -22,7 +22,7 @@ const findCharCode = (
 
 export const scan = (
   args: readonly string[],
-  maybeValueAfterSpace: (optionName: string) => boolean
+  mayHaveSubsequentValue: (optionName: string) => boolean
 ): Readonly<Record<string, readonly string[]>> => {
   const parameters: string[] = [];
   const options: Record<string, string[]> = { _: parameters };
@@ -92,7 +92,7 @@ export const scan = (
       // just a long option name
       const optionName = arg.slice(2);
       const option = (options[optionName] ??= []);
-      if (maybeValueAfterSpace(optionName)) currentValueContainer = option;
+      if (mayHaveSubsequentValue(optionName)) currentValueContainer = option;
     }
   }
 
