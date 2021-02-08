@@ -1,5 +1,3 @@
-import type { OptionsDefinition } from "./options-definition";
-
 const addOptionValue = (
   options: Record<string, string[]>,
   name: string,
@@ -24,7 +22,7 @@ const findCharCode = (
 
 export const scan = (
   args: readonly string[],
-  optionsDefinition: OptionsDefinition
+  optionsDefinition: Record<string, { isFlag?: boolean }>
 ): Readonly<Record<string, readonly string[]>> => {
   const parameters: string[] = [];
   const options: Record<string, string[]> = { _: parameters };
