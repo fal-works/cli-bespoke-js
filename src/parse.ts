@@ -9,7 +9,7 @@ export const parse = <T extends Record<string, unknown>>(
   const result: Partial<T> = {};
 
   for (const name in optionsDefinition)
-    result[name] = optionsDefinition[name].validate(rawData[name]);
+    result[name] = optionsDefinition[name].convert(rawData[name]);
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
   return result as T;
