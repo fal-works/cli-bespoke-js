@@ -1,8 +1,16 @@
 import { scan } from "./scan.js";
-import { validate } from "./validate.js";
 import type { OptionsDefinition } from "./options-definition";
 
 export const parse = <T extends Record<string, unknown>>(
   args: readonly string[],
   optionsDefinition: OptionsDefinition<T>
-): T => validate(scan(args, optionsDefinition), optionsDefinition);
+): T => {
+  const rawData = scan(args, optionsDefinition);
+  const result: Partial<T> = {};
+
+  for (const name in optionsDefinition)
+    result[name] = optionsDefinition[name].validate(rawData[name]);
+
+  // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+  return result as T;
+};
