@@ -1,4 +1,4 @@
-import { parse } from "../lib/index.js";
+import { parse, to, convert } from "../lib/index.js";
 
 const args = [
   "command",
@@ -15,15 +15,15 @@ const args = [
   "-valueWithHyphen",
 ];
 
+const { flag, zeroOrOne, atDefault } = convert;
+
 console.log(
   parse(args, {
+    foo: {
+      convert: to(flag),
+    },
     outfile: {
-      validate: (values) => {
-        if (!values) throw "";
-        const value = values[0];
-        if (!value) throw "";
-        return value;
-      },
+      convert: to(zeroOrOne).then(atDefault("dist.js")),
     },
   })
 );
