@@ -1,7 +1,8 @@
+import type { RawValues } from "./types";
 import type { OptionsDefinition } from "./options-definition";
 
 export type Validators<T extends Record<string, unknown>> = {
-  readonly [P in keyof T]: (values: readonly string[] | undefined) => T[P];
+  readonly [P in keyof T]: (rawValues: RawValues) => T[P];
 };
 
 export const validate = <T extends Record<string, unknown>>(
