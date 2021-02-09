@@ -24,7 +24,7 @@ const findCharCode = (
 
 export const scan = (
   args: readonly string[],
-  optionsDefinition: Record<string, ScanOptionDefinition>
+  optionsDefinition: Readonly<Record<string, ScanOptionDefinition>>
 ): Readonly<Record<string, readonly string[]>> => {
   const parameters: string[] = [];
   const options: Record<string, string[]> = { _: parameters };
