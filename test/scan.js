@@ -16,7 +16,7 @@ const result = scan(
     "-valueWithHyphen",
   ],
   (name) => name === "bar",
-  (name) => name
+  (name) => (name === "s" ? "src" : name)
 );
 
 console.log(result);
