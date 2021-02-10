@@ -1,5 +1,14 @@
 import type { RawValues, ErrorSender } from "../types";
 
+export const optionalOne = <T>(
+  values: readonly T[] | undefined,
+  sendError: ErrorSender
+): T | undefined => {
+  if (values === undefined) return undefined;
+  if (1 < values.length) sendError("Too many values");
+  return values[0];
+};
+
 export const zeroOrOne = <T>(
   values: readonly T[] | undefined,
   sendError: ErrorSender
