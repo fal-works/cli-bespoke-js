@@ -32,5 +32,14 @@ export const justOne = <T>(
 export const zeroOrMore = <T>(values: readonly T[] | undefined): readonly T[] =>
   values ?? [];
 
+export const oneOrMore = <T>(
+  values: readonly T[] | undefined,
+  sendError: ErrorSender
+): readonly [T, ...T[]] => {
+  if (values === undefined) sendError("Missing value");
+  if (values.length === 0) sendError("Missing value");
+  return values as readonly [T, ...T[]];
+};
+
 export const commaSeparated = (values: RawValues): string[] =>
   values === undefined ? [] : values.flatMap((s) => s.split(","));
