@@ -14,8 +14,12 @@ export const parse = <T extends Record<string, unknown>>(
   const rawData = scan(args, isFlag, normalizeOptionName);
   const result: Partial<T> = {};
 
-  for (const name in converters)
-    result[name] = converters[name].run(rawData[name]);
+  for (const name in converters) {
+    const sendError = (message: string) => {
+      throw new Error(`${message} (option: ${name})`);
+    };
+    result[name] = converters[name].run(rawData[name], sendError);
+  }
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
   return result as T;

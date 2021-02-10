@@ -1,6 +1,11 @@
-export const required = <T>(value: T | null | undefined): T => {
+import type { ErrorSender } from "../types";
+
+export const required = <T>(
+  value: T | null | undefined,
+  sendError: ErrorSender
+): T => {
   if (value) return value;
-  throw "Missing value";
+  sendError("Missing value");
 };
 
 export const atDefault = <T>(defaultValue: T) => (
