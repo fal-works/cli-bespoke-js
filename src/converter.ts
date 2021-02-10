@@ -1,32 +1,32 @@
 import type { RawValues, ErrorSender } from "./types";
 
-export type ConverterFunction<FromType, ToType> = (
-  value: FromType,
+export type ConverterFunction<SourceType, TargetType> = (
+  value: SourceType,
   sendError: ErrorSender
-) => ToType;
+) => TargetType;
 
-export class Converter<T> {
-  readonly run: ConverterFunction<RawValues, T>;
+export class Converter<TargetType> {
+  readonly run: ConverterFunction<RawValues, TargetType>;
 
-  constructor(convert: ConverterFunction<RawValues, T>) {
+  constructor(convert: ConverterFunction<RawValues, TargetType>) {
     this.run = convert;
   }
 
-  then<NextType>(
-    nextConvert: (value: T, sendError: ErrorSender) => NextType
-  ): Converter<NextType> {
-    return new Converter<NextType>((rawValues, sendError) =>
+  then<NextTargetType>(
+    nextConvert: (value: TargetType, sendError: ErrorSender) => NextTargetType
+  ): Converter<NextTargetType> {
+    return new Converter<NextTargetType>((rawValues, sendError) =>
       nextConvert(this.run(rawValues, sendError), sendError)
     );
   }
 }
 
-export const to = <T>(
+export const to = <TargetType>(
   convert: (
     rawValues: readonly string[] | undefined,
     sendError: ErrorSender
-  ) => T
-): Converter<T> => new Converter(convert);
+  ) => TargetType
+): Converter<TargetType> => new Converter(convert);
 
 export const toFlag = new Converter((value: unknown) => (value ? true : false));
 
