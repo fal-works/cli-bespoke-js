@@ -22,7 +22,8 @@ const findCharCode = (
 
 export const scan = (
   args: readonly string[],
-  isFlag: (optionName: string) => boolean
+  isFlag: (optionName: string) => boolean,
+  normalizeOptionName: (name: string) => string
 ): Readonly<Record<string, readonly string[]>> => {
   const parameters: string[] = [];
   const options: Record<string, string[]> = { _: parameters };
@@ -58,7 +59,8 @@ export const scan = (
         }
         // just a short option name
         else {
-          currentValueContainer = options[arg.charAt(1)] ??= [];
+          const optionName = normalizeOptionName(arg.charAt(1));
+          currentValueContainer = options[optionName] ??= [];
           continue;
         }
     }
@@ -67,12 +69,16 @@ export const scan = (
     if (arg.charCodeAt(1) !== /* hyphen */ 45) {
       // short option with equal-separated value
       if (arg.charCodeAt(2) === /* equal */ 61) {
-        addOptionValue(options, arg.charAt(1), arg.substring(3));
+        const optionName = normalizeOptionName(arg.charAt(1));
+        addOptionValue(options, optionName, arg.substring(3));
         continue;
       }
 
       // multiple short option names
-      for (let i = 1; i < argLen; i += 1) options[arg.charAt(i)] ??= [];
+      for (let i = 1; i < argLen; i += 1) {
+        const optionName = normalizeOptionName(arg.charAt(i));
+        options[optionName] ??= [];
+      }
       continue;
     }
     // Option with double hyphens
@@ -81,16 +87,13 @@ export const scan = (
 
       // long option with equal-separated value
       if (equalIndex !== -1) {
-        addOptionValue(
-          options,
-          arg.substring(2, equalIndex),
-          arg.substring(equalIndex + 1)
-        );
+        const optionName = normalizeOptionName(arg.substring(2, equalIndex));
+        addOptionValue(options, optionName, arg.substring(equalIndex + 1));
         continue;
       }
 
       // just a long option name
-      const optionName = arg.slice(2);
+      const optionName = normalizeOptionName(arg.slice(2));
       const option = (options[optionName] ??= []);
       if (!isFlag(optionName)) currentValueContainer = option;
     }

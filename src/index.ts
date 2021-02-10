@@ -1,4 +1,5 @@
 export type { ConverterMap } from "./converter";
+export type { AliasRecord } from "./alias";
 
 export { scan } from "./scan.js";
 export { parse } from "./parse.js";
