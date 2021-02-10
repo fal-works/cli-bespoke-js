@@ -41,5 +41,20 @@ export const oneOrMore = <T>(
   return values as readonly [T, ...T[]];
 };
 
+type MapCallback<Input, Output> = (
+  element: Input,
+  index: number,
+  array: readonly Input[]
+) => Output;
+
+export const map = <Input, Output>(callback: MapCallback<Input, Output>) => (
+  values: readonly Input[]
+): Output[] => values.map(callback);
+
+export const optionalMap = <Input, Output>(
+  callback: MapCallback<Input, Output>
+) => (values: readonly Input[] | undefined): Output[] | undefined =>
+  values === undefined ? undefined : values.map(callback);
+
 export const commaSeparated = (values: RawValues): string[] =>
   values === undefined ? [] : values.flatMap((s) => s.split(","));
