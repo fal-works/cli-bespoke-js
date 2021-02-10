@@ -28,7 +28,9 @@ export const to = <TargetType>(
   ) => TargetType
 ): Converter<TargetType> => new Converter(convert);
 
-export const toFlag = new Converter((value: unknown) => (value ? true : false));
+export const toFlag = new Converter((rawValues: RawValues) =>
+  rawValues === undefined ? false : true
+);
 
 export const asIs = new Converter((rawValues: RawValues) => rawValues);
 

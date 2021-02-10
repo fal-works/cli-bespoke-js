@@ -4,8 +4,8 @@ export const required = <T>(
   value: T | null | undefined,
   sendError: ErrorSender
 ): T => {
-  if (value) return value;
-  sendError("Missing value");
+  if (value == null) sendError("Missing value");
+  return value;
 };
 
 export const atDefault = <T>(defaultValue: T) => (
