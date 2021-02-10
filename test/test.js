@@ -1,4 +1,4 @@
-import { parse, first, flag, asIs, convert } from "../lib/index.js";
+import { parse, flag, first, convert as cv } from "../lib/index.js";
 
 const args = [
   "command",
@@ -15,14 +15,12 @@ const args = [
   "-valueWithHyphen",
 ];
 
-const { zeroOrOne, atDefault } = convert;
-
 const result = parse(
   args,
   {
     foo: flag,
-    outfile: first(zeroOrOne).then(atDefault("dist.js")),
-    src: asIs,
+    outfile: first(cv.zeroOrOne).then(cv.atDefault("dist.js")),
+    src: cv.asIs,
   },
   { src: "s" }
 );
