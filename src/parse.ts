@@ -15,10 +15,11 @@ export const parse = <T extends Record<string, unknown>>(
   const result: Partial<T> = {};
 
   for (const name in converters) {
+    const convert = converters[name];
     const sendError = (message: string) => {
       throw new Error(`${message} (option: ${name})`);
     };
-    result[name] = converters[name].run(rawData[name], sendError);
+    result[name] = convert(rawData[name], sendError);
   }
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
