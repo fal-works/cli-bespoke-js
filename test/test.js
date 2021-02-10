@@ -1,4 +1,4 @@
-import { parse, first, toFlag, asIs, convert } from "../lib/index.js";
+import { parse, first, flag, asIs, convert } from "../lib/index.js";
 
 const args = [
   "command",
@@ -20,7 +20,7 @@ const { zeroOrOne, atDefault } = convert;
 const result = parse(
   args,
   {
-    foo: toFlag,
+    foo: flag,
     outfile: first(zeroOrOne).then(atDefault("dist.js")),
     src: asIs,
   },

@@ -25,7 +25,7 @@ export const first = <Output>(
   convert: (rawValues: RawValues, sendError: ErrorSender) => Output
 ): ChainableConverter<Output> => Object.assign(convert.bind(null), { then });
 
-export const toFlag: Converter<RawValues, boolean> = (rawValues: RawValues) =>
+export const flag: Converter<RawValues, boolean> = (rawValues: RawValues) =>
   rawValues === undefined ? false : true;
 
 export const asIs: Converter<RawValues, RawValues> = (rawValues: RawValues) =>
