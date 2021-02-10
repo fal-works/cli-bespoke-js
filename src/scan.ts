@@ -1,5 +1,3 @@
-import type { ScanOptionDefinition } from "./options-definition";
-
 const addOptionValue = (
   options: Record<string, string[]>,
   name: string,
@@ -24,7 +22,7 @@ const findCharCode = (
 
 export const scan = (
   args: readonly string[],
-  optionsDefinition: Readonly<Record<string, ScanOptionDefinition>>
+  isFlag: (optionName: string) => boolean
 ): Readonly<Record<string, readonly string[]>> => {
   const parameters: string[] = [];
   const options: Record<string, string[]> = { _: parameters };
@@ -94,8 +92,7 @@ export const scan = (
       // just a long option name
       const optionName = arg.slice(2);
       const option = (options[optionName] ??= []);
-      if (!optionsDefinition[optionName]?.isFlag)
-        currentValueContainer = option;
+      if (!isFlag(optionName)) currentValueContainer = option;
     }
   }
 

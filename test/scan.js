@@ -16,8 +16,6 @@ console.log(
       "--",
       "-valueWithHyphen",
     ],
-    {
-      bar: { isFlag: true },
-    }
+    (name) => name === "bar"
   )
 );

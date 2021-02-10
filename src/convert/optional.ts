@@ -1,5 +1,3 @@
-export const flag = (value: unknown): boolean => (value ? true : false);
-
 export const required = <T>(value: T | null | undefined): T => {
   if (value) return value;
   throw "Missing value";
