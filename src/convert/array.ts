@@ -1,3 +1,5 @@
+import type { RawValues } from "../types";
+
 export const zeroOrOne = <T>(values: readonly T[] | undefined): T | null => {
   if (!values) return null;
   if (1 < values.length) throw "Too many values";
@@ -11,3 +13,6 @@ export const justOne = <T>(values: readonly T[] | undefined): T => {
   if (!value) throw "Missing value";
   return value;
 };
+
+export const commaSeparated = (values: RawValues): string[] =>
+  values === undefined ? [] : values.flatMap((s) => s.split(","));
