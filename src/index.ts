@@ -1,4 +1,4 @@
-export type { ConverterRecord } from "./converter";
+export type { ConverterFunction, ConverterRecord } from "./converter";
 export type { AliasRecord } from "./alias";
 
 export { scan } from "./scan.js";
