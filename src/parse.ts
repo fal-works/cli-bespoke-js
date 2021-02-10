@@ -1,6 +1,7 @@
 import { scan } from "./scan.js";
 import { flag } from "./converter.js";
 import { createAliasMapFunction } from "./alias.js";
+import { config } from "./config.js";
 import type { ConverterRecord } from "./converter";
 import type { AliasRecord } from "./alias";
 
@@ -14,12 +15,11 @@ export const parse = <T extends Record<string, unknown>>(
   const rawData = scan(args, isFlag, normalizeOptionName);
   const result: Partial<T> = {};
 
-  for (const name in converters) {
-    const convert = converters[name];
-    const sendError = (message: string) => {
-      throw new Error(`${message} (option: ${name})`);
-    };
-    result[name] = convert(rawData[name], sendError);
+  for (const optionName in converters) {
+    const convert = converters[optionName];
+    const sendError = (error: Error) =>
+      config.onError(config.editError(error, optionName));
+    result[optionName] = convert(rawData[optionName], sendError);
   }
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion

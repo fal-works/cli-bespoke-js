@@ -1,2 +1,2 @@
 export type RawValues = readonly string[] | undefined;
-export type ErrorSender = (message: string) => never;
+export type ErrorSender = (error: Error) => never;

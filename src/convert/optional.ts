@@ -4,7 +4,7 @@ export const required = <T>(
   value: T | null | undefined,
   sendError: ErrorSender
 ): T => {
-  if (value == null) sendError("Missing value");
+  if (value == null) sendError(new Error("Missing value"));
   return value;
 };
 

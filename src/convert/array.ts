@@ -5,7 +5,7 @@ export const optionalOne = <T>(
   sendError: ErrorSender
 ): T | undefined => {
   if (values === undefined) return undefined;
-  if (1 < values.length) sendError("Too many values");
+  if (1 < values.length) sendError(new Error("Too many values"));
   return values[0];
 };
 
@@ -14,7 +14,7 @@ export const zeroOrOne = <T>(
   sendError: ErrorSender
 ): T | null => {
   if (values === undefined) return null;
-  if (1 < values.length) sendError("Too many values");
+  if (1 < values.length) sendError(new Error("Too many values"));
   return values[0] ?? null;
 };
 
@@ -22,10 +22,10 @@ export const justOne = <T>(
   values: readonly T[] | undefined,
   sendError: ErrorSender
 ): T => {
-  if (values === undefined) sendError("Missing value");
-  if (1 < values.length) sendError("Too many values");
+  if (values === undefined) sendError(new Error("Missing value"));
+  if (1 < values.length) sendError(new Error("Too many values"));
   const value = values[0];
-  if (!value) sendError("Missing value");
+  if (!value) sendError(new Error("Missing value"));
   return value;
 };
 
@@ -36,8 +36,8 @@ export const oneOrMore = <T>(
   values: readonly T[] | undefined,
   sendError: ErrorSender
 ): readonly [T, ...T[]] => {
-  if (values === undefined) sendError("Missing value");
-  if (values.length === 0) sendError("Missing value");
+  if (values === undefined) sendError(new Error("Missing value"));
+  if (values.length === 0) sendError(new Error("Missing value"));
   return values as readonly [T, ...T[]];
 };
 
