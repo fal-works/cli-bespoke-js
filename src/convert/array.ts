@@ -29,5 +29,8 @@ export const justOne = <T>(
   return value;
 };
 
+export const zeroOrMore = <T>(values: readonly T[] | undefined): readonly T[] =>
+  values ?? [];
+
 export const commaSeparated = (values: RawValues): string[] =>
   values === undefined ? [] : values.flatMap((s) => s.split(","));
