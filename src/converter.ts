@@ -17,6 +17,8 @@ export const to = <T>(convert: (rawValues: RawValues) => T): Converter<T> =>
 
 export const toFlag = new Converter((value: unknown) => (value ? true : false));
 
+export const asIs = new Converter((rawValues: RawValues) => rawValues);
+
 export type ConverterRecord<T extends Record<string, unknown>> = {
   readonly [P in keyof T]: Converter<T[P]>;
 };
