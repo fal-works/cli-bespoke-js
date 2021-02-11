@@ -7,13 +7,13 @@ No dependencies.
 
 ## Usage
 
-To parse any commandline, use `parse()` and pass `Converter` functions for each option.
+To parse any commandline, use `parse()` (or `parseLazy()`) and pass `Converter` functions for each option.
 
 ```ts
 type Converter<Input, Output> = (value: Input, sendError: ErrorSender) => Output;
 ```
 
-The return type of `parse()` is determined by which `Converter` you pass.  
+The return type is determined by which `Converter` you pass.  
 There are several built-in `Converter`s, but you can also pass user-defined ones.
 
 
@@ -34,14 +34,14 @@ const args = parse({
 
   // Specify all options and their `Converter` functions.
   convert: {
-    // Error if multiple values.
-    _: cv.optionalOne,
+    // Error if either undefined, zero or multiple values.
+    _: cv.justOne,
 
     // No values. Parsed as boolean.
     help: flag,
 
-    // Error if either undefined, zero or multiple values.
-    outfile: cv.justOne,
+    // Error if multiple values.
+    outfile: cv.optionalOne,
 
     // Split strings, accepting undefined.
     strs: cvf.optional(cvf.split(",")),
@@ -62,9 +62,9 @@ The result will be typed as follows:
 
 ```ts
 const args: {
-  _: string | undefined;
+  _: string;
   help: boolean;
-  outfile: string;
+  outfile: string | undefined;
   strs: string[] | undefined;
   nums: number[]
 }

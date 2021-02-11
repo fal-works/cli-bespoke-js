@@ -7,7 +7,7 @@ import { createAliasMapFunction } from "./alias.js";
 import { config } from "./common/config.js";
 
 /**
- * Arguments to be passed to `parse()`.
+ * Arguments to be passed to `parse()` or `parseLazy()`.
  */
 export type ParseParams<Result extends StringRecord> = {
   /**
@@ -82,4 +82,22 @@ export const parse = <Result extends StringRecord>(
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
   return result as Result;
+};
+
+/**
+ * Parses a commandline.
+ * Immediately scans `params.args`, however the values of each option will be
+ * converted lazily.
+ */
+export const parseLazy = <Result extends StringRecord>(
+  params: ParseParams<Result>
+): LazyProps<Result> => {
+  const convertValues = prepareConvert(params);
+  const result: Partial<LazyProps<Result>> = {};
+
+  for (const optionName in params.convert)
+    result[optionName] = () => convertValues(optionName);
+
+  // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+  return result as LazyProps<Result>;
 };
