@@ -1,3 +1,6 @@
+/**
+ * Object that maps option names to their alias names.
+ */
 export type AliasRecord = Record<string, string | readonly string[]>;
 
 export const createAliasMap = (aliases: AliasRecord): Map<string, string> => {

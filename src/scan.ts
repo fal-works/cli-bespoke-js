@@ -30,6 +30,11 @@ type MutableScanResult = {
   [optionName: string]: string[];
 };
 
+/**
+ * Scans a commandline.
+ * Returns an object containg parameters (`_`) and options without type cast
+ * and validation.
+ */
 export const scan = (
   args: readonly string[],
   isFlag: (optionName: string) => boolean,

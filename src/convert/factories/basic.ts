@@ -1,15 +1,27 @@
 import type { ErrorSender } from "../../types";
 import type { Converter } from "../converter";
 
+/**
+ * - Converts and returns the given value.
+ * - If the given value is `undefined`, returns `undefined` without conversion.
+ */
 export const optional = <Input, Output>(
   convert: Converter<Input, Output>
 ): Converter<Input | undefined, Output | undefined> => (value, sendError) =>
   value === undefined ? undefined : convert(value, sendError);
 
+/**
+ * - Returns the given value.
+ * - If the given value is `undefined`, returns `defaultValue` instead.
+ */
 export const atDefault = <S>(defaultValue: S) => <T>(
   value: T | undefined
 ): T | S => (value === undefined ? defaultValue : value);
 
+/**
+ * Raises error if the given value is not included in `candidates`.
+ * Elements will be compared with a simple `===` operator.
+ */
 export const validValues = <T>(
   candidates: readonly T[]
 ): Converter<unknown, T> => (value: unknown, sendError: ErrorSender): T => {

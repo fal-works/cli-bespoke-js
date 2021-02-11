@@ -1,3 +1,7 @@
+/**
+ * Fields used in `cli-bespoke`.
+ * Each field can be replaced for customizing the behavior.
+ */
 export const config = {
   onError: (error: Error): never => {
     throw error;

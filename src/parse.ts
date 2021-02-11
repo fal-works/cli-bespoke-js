@@ -5,9 +5,35 @@ import { flag } from "./convert/converter.js";
 import { createAliasMapFunction } from "./alias.js";
 import { config } from "./config.js";
 
+/**
+ * Parses a commandline.
+ * Returns an object containg parameters (`_`) and options that are typed and
+ * validated.
+ */
 export const parse = <T extends Record<string, unknown>>(params: {
+  /**
+   * Array of arguments.
+   * Typically `process.argv.slice(2)` or `anyCommandlineString.split(" ")`.
+   */
   args: readonly string[];
+
+  /**
+   * Object whose keys are option names (or an underscore `_` for parameters)
+   * and whose values are `Converter` functions.
+   *
+   * Specify all possible options (excluding aliases) here. Only options
+   * whose names are contained in this object will be parsed. This object
+   * also determines the types of the returning parameters and option values.
+   *
+   * Use `flag` (which is a special `Converter`) for options that do not
+   * receive values.
+   */
   convert: ConverterRecord<T>;
+
+  /**
+   * Object whose keys are option names and whose values are alias names.
+   * Unlike `convert`, here you do not have to specify all option names.
+   */
   alias?: AliasRecord;
 }): T => {
   const { args, convert, alias = {} } = params;

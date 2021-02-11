@@ -1,6 +1,11 @@
 import type { Converter } from "../converter";
 import * as cv from "../components/array.js";
 
+/**
+ * - Converts and returns the first element of the given array.
+ * - Returns `undefined` if the given array is `undefined` or empty.
+ * - Raises error if the given array has more than 1 elements.
+ */
 export const optionalOne = <Input, Output>(
   convert: Converter<Input, Output>
 ): Converter<readonly Input[] | undefined, Output | undefined> => {
@@ -10,6 +15,11 @@ export const optionalOne = <Input, Output>(
   };
 };
 
+/**
+ * - Converts and returns the first element of the given array.
+ * - Returns `null` if the given array is `undefined` or empty.
+ * - Raises error if the given array has more than 1 elements.
+ */
 export const zeroOrOne = <Input, Output>(
   convert: Converter<Input, Output>
 ): Converter<readonly Input[] | undefined, Output | null> => {
@@ -19,6 +29,10 @@ export const zeroOrOne = <Input, Output>(
   };
 };
 
+/**
+ * - Converts and returns the first element of the given array.
+ * - Raises error unless the given array has just 1 element.
+ */
 export const justOne = <Input, Output>(
   convert: Converter<Input, Output>
 ): Converter<readonly Input[] | undefined, Output> => {
@@ -28,6 +42,10 @@ export const justOne = <Input, Output>(
   };
 };
 
+/**
+ * - Converts each element of the given array.
+ * - Returns an empty array if the given array is `undefined`.
+ */
 export const zeroOrMore = <Input, Output>(
   convert: Converter<Input, Output>
 ): Converter<readonly Input[] | undefined, Output[]> => {
@@ -35,6 +53,10 @@ export const zeroOrMore = <Input, Output>(
     cv.zeroOrMore(values).map((value) => convert(value, sendError));
 };
 
+/**
+ * - Converts each element of the given array.
+ * - Raises error if the given array is `undefined` or empty.
+ */
 export const oneOrMore = <Input, Output>(
   convert: Converter<Input, Output>
 ): Converter<readonly Input[] | undefined, [Output, ...Output[]]> => {
@@ -54,10 +76,18 @@ type MapCallback<Input, Output> = (
   array: readonly Input[]
 ) => Output;
 
+/**
+ * Similar to `Array.map()`.
+ */
 export const map = <Input, Output>(
   callback: MapCallback<Input, Output>
 ): Converter<readonly Input[], Output[]> => (values) => values.map(callback);
 
+/**
+ * Calls `split()` on the given string.
+ * If a string array is provided, calls `split()` on each element and
+ * flattens the result.
+ */
 export const split = (
   separator: string
 ): Converter<string | readonly string[], string[]> => {
