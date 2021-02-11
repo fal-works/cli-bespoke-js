@@ -1,3 +1,4 @@
+import type { StringRecord } from "../common/types";
 import type { RawValues } from "../scan";
 
 /**
@@ -16,7 +17,7 @@ export type Converter<Input, Output> = (
 /**
  * Object containing `Converter` functions. Should be passed to `parse()`.
  */
-export type ConverterRecord<T extends Record<string, unknown>> = {
+export type ConverterRecord<T extends StringRecord> = {
   readonly [P in keyof T]: Converter<RawValues, T[P]>;
 };
 

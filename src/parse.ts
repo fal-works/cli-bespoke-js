@@ -1,3 +1,4 @@
+import type { StringRecord } from "./common/types";
 import type { ConverterRecord } from "./convert";
 import type { AliasRecord } from "./alias";
 import { scan } from "./scan.js";
@@ -8,7 +9,7 @@ import { config } from "./common/config.js";
 /**
  * Arguments to be passed to `parse()`.
  */
-export type ParseParams<T extends Record<string, unknown>> = {
+export type ParseParams<T extends StringRecord> = {
   /**
    * Array of arguments.
    * Typically `process.argv.slice(2)` or `anyCommandlineString.split(" ")`.
@@ -40,9 +41,7 @@ export type ParseParams<T extends Record<string, unknown>> = {
  * Returns an object containg parameters (`_`) and options that are typed and
  * validated.
  */
-export const parse = <T extends Record<string, unknown>>(
-  params: ParseParams<T>
-): T => {
+export const parse = <T extends StringRecord>(params: ParseParams<T>): T => {
   const { args, convert, alias = {} } = params;
 
   const isFlag = (optionName: string) => convert[optionName] === flag;
