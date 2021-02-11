@@ -11,5 +11,5 @@ export const required = <T>(
   return value;
 };
 
-export const float = (s: string): number => parseFloat(s);
-export const int = (s: string): number => parseInt(s);
+export const float: Converter<string, number> = (s) => parseFloat(s);
+export const int: Converter<string, number> = (s) => parseInt(s);
