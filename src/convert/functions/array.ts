@@ -1,3 +1,54 @@
+import type { ErrorSender } from "../../types";
+import type { Converter } from "../converter";
+import * as cv from "../components/array.js";
+
+export const optionalOne = <Input, Output>(
+  convert: Converter<Input, Output>
+) => (
+  values: readonly Input[] | undefined,
+  sendError: ErrorSender
+): Output | undefined => {
+  const value = cv.optionalOne(values, sendError);
+  return value === undefined ? undefined : convert(value, sendError);
+};
+
+export const zeroOrOne = <Input, Output>(convert: Converter<Input, Output>) => (
+  values: readonly Input[] | undefined,
+  sendError: ErrorSender
+): Output | null => {
+  const value = cv.zeroOrOne(values, sendError);
+  return value === null ? null : convert(value, sendError);
+};
+
+export const justOne = <Input, Output>(convert: Converter<Input, Output>) => (
+  values: readonly Input[] | undefined,
+  sendError: ErrorSender
+): Output => {
+  const value = cv.justOne(values, sendError);
+  return convert(value, sendError);
+};
+
+export const zeroOrMore = <Input, Output>(
+  convert: Converter<Input, Output>
+) => (
+  values: readonly Input[] | undefined,
+  sendError: ErrorSender
+): readonly Output[] =>
+  cv.zeroOrMore(values).map((value) => convert(value, sendError));
+
+export const oneOrMore = <Input, Output>(convert: Converter<Input, Output>) => (
+  values: readonly Input[] | undefined,
+  sendError: ErrorSender
+): readonly [Output, ...Output[]] => {
+  const validatedValues = cv.oneOrMore(values, sendError);
+  const outputValues: readonly Output[] = validatedValues.map((value) =>
+    convert(value, sendError)
+  );
+
+  // eslint-disable-next-line total-functions/no-unsafe-type-assertion
+  return outputValues as readonly [Output, ...Output[]];
+};
+
 type MapCallback<Input, Output> = (
   element: Input,
   index: number,
