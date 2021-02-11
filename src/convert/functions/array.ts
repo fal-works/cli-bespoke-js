@@ -30,23 +30,19 @@ export const justOne = <Input, Output>(convert: Converter<Input, Output>) => (
 
 export const zeroOrMore = <Input, Output>(
   convert: Converter<Input, Output>
-) => (
-  values: readonly Input[] | undefined,
-  sendError: ErrorSender
-): readonly Output[] =>
+) => (values: readonly Input[] | undefined, sendError: ErrorSender): Output[] =>
   cv.zeroOrMore(values).map((value) => convert(value, sendError));
 
 export const oneOrMore = <Input, Output>(convert: Converter<Input, Output>) => (
   values: readonly Input[] | undefined,
   sendError: ErrorSender
-): readonly [Output, ...Output[]] => {
-  const validatedValues = cv.oneOrMore(values, sendError);
-  const outputValues: readonly Output[] = validatedValues.map((value) =>
-    convert(value, sendError)
-  );
+): [Output, ...Output[]] => {
+  const outputValues = cv
+    .oneOrMore(values, sendError)
+    .map((value) => convert(value, sendError));
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
-  return outputValues as readonly [Output, ...Output[]];
+  return outputValues as [Output, ...Output[]];
 };
 
 type MapCallback<Input, Output> = (
