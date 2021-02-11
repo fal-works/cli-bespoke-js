@@ -53,11 +53,6 @@ export const map = <Input, Output>(callback: MapCallback<Input, Output>) => (
   values: readonly Input[]
 ): Output[] => values.map(callback);
 
-export const optionalMap = <Input, Output>(
-  callback: MapCallback<Input, Output>
-) => (values: readonly Input[] | undefined): Output[] | undefined =>
-  values === undefined ? undefined : values.map(callback);
-
 export const split = (separator: string) => (
   values: string | readonly string[]
 ): string[] =>
