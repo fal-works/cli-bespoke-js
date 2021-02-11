@@ -3,7 +3,7 @@ import type { AliasRecord } from "./alias";
 import { scan } from "./scan.js";
 import { flag } from "./convert/converter.js";
 import { createAliasMapFunction } from "./alias.js";
-import { config } from "./config.js";
+import { config } from "./common/config.js";
 
 /**
  * Arguments to be passed to `parse()`.
