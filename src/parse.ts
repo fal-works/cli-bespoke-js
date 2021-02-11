@@ -1,4 +1,4 @@
-import type { StringRecord } from "./common/types";
+import type { StringRecord, LazyProps } from "./common/types";
 import type { ConverterRecord } from "./convert";
 import type { AliasRecord } from "./alias";
 import { scan } from "./scan.js";
@@ -37,6 +37,36 @@ export type ParseParams<Result extends StringRecord> = {
 };
 
 /**
+ * Calls `scan()`.
+ */
+const scanData = (params: ParseParams<StringRecord>) => {
+  const { args, convert, alias = {} } = params;
+  const isFlag = (optionName: string) => convert[optionName] === flag;
+  const normalizeOptionName = createAliasMapFunction(alias);
+
+  return scan(args, isFlag, normalizeOptionName);
+};
+
+/**
+ * Creates a function that raises an `Error` for `optionName`.
+ */
+const sendError = (optionName: string) => (error: Error) =>
+  config.onError(config.editError(error, optionName));
+
+/**
+ * Creates a function that converts values for a given option name.
+ */
+const prepareConvert = <Result extends StringRecord>(
+  params: ParseParams<Result>
+) => {
+  const { convert } = params;
+  const rawData = scanData(params);
+
+  return <P extends Extract<keyof Result, string>>(optionName: P) =>
+    convert[optionName](rawData[optionName], sendError(optionName));
+};
+
+/**
  * Parses a commandline.
  * Returns an object containg parameters (`_`) and options that are typed and
  * validated.
@@ -44,19 +74,11 @@ export type ParseParams<Result extends StringRecord> = {
 export const parse = <Result extends StringRecord>(
   params: ParseParams<Result>
 ): Result => {
-  const { args, convert, alias = {} } = params;
-
-  const isFlag = (optionName: string) => convert[optionName] === flag;
-  const normalizeOptionName = createAliasMapFunction(alias);
-  const rawData = scan(args, isFlag, normalizeOptionName);
+  const convertValues = prepareConvert(params);
   const result: Partial<Result> = {};
 
-  for (const optionName in convert) {
-    const convertValues = convert[optionName];
-    const sendError = (error: Error) =>
-      config.onError(config.editError(error, optionName));
-    result[optionName] = convertValues(rawData[optionName], sendError);
-  }
+  for (const optionName in params.convert)
+    result[optionName] = convertValues(optionName);
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
   return result as Result;
