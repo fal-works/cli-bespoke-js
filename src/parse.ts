@@ -1,9 +1,9 @@
+import type { ConverterRecord } from "./convert";
+import type { AliasRecord } from "./alias";
 import { scan } from "./scan.js";
-import { flag } from "./converter.js";
+import { flag } from "./convert/converter.js";
 import { createAliasMapFunction } from "./alias.js";
 import { config } from "./config.js";
-import type { ConverterRecord } from "./converter";
-import type { AliasRecord } from "./alias";
 
 export const parse = <T extends Record<string, unknown>>(params: {
   args: readonly string[];

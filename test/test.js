@@ -1,4 +1,10 @@
-import { parse, flag, first, convert as cv } from "../lib/index.js";
+import {
+  parse,
+  flag,
+  first,
+  converters as cv,
+  converterFunctions as cvf,
+} from "../lib/index.js";
 
 const args = [
   "command",
@@ -19,7 +25,7 @@ const result = parse({
   args,
   convert: {
     foo: flag,
-    outfile: first(cv.zeroOrOne).then(cv.atDefault("dist.js")),
+    outfile: first(cv.zeroOrOne).then(cvf.atDefault("dist.js")),
     src: cv.asIs,
   },
   alias: { src: "s" },
