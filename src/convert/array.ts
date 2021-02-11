@@ -1,4 +1,4 @@
-import type { RawValues, ErrorSender } from "../types";
+import type { ErrorSender } from "../types";
 
 export const optionalOne = <T>(
   values: readonly T[] | undefined,
@@ -58,5 +58,9 @@ export const optionalMap = <Input, Output>(
 ) => (values: readonly Input[] | undefined): Output[] | undefined =>
   values === undefined ? undefined : values.map(callback);
 
-export const commaSeparated = (values: RawValues): string[] =>
-  values === undefined ? [] : values.flatMap((s) => s.split(","));
+export const split = (separator: string) => (
+  values: string | readonly string[]
+): string[] =>
+  typeof values === "string"
+    ? values.split(separator)
+    : values.flatMap((s) => s.split(separator));
