@@ -15,6 +15,6 @@ export const required = <T>(
   return value;
 };
 
-export const atDefault = <T>(defaultValue: T) => (
+export const atDefault = <S>(defaultValue: S) => <T>(
   value: T | null | undefined
-): T => value ?? defaultValue;
+): T | S => value ?? defaultValue;
