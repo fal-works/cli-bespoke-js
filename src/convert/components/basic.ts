@@ -1,5 +1,5 @@
-import type { RawValues, ErrorSender } from "../../types";
-import type { Converter } from "../converter";
+import type { RawValues } from "../../scan";
+import type { Converter, ErrorSender } from "../converter";
 
 /**
  * Returns the passed values without any conversion.

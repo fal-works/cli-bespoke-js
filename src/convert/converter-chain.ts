@@ -1,4 +1,4 @@
-import type { RawValues, ErrorSender } from "../types";
+import type { RawValues } from "../scan";
 import type { Converter } from "./converter";
 
 /**
@@ -26,5 +26,5 @@ const then = function <CurrentOutput, NextOutput>(
  * `Converter` using the `then()` method.
  */
 export const first = <Output>(
-  convert: (rawValues: RawValues, sendError: ErrorSender) => Output
+  convert: Converter<RawValues, Output>
 ): ChainableConverter<Output> => Object.assign(convert.bind(null), { then });

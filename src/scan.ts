@@ -1,3 +1,8 @@
+/**
+ * Values for any option, obtained by `scan()`.
+ */
+export type RawValues = readonly string[] | undefined;
+
 const addOptionValue = (
   options: Record<string, string[]>,
   name: string,

@@ -1,5 +1,4 @@
-import type { ErrorSender } from "../../types";
-import type { Converter } from "../converter";
+import type { Converter, ErrorSender } from "../converter";
 
 /**
  * - Converts and returns the given value.

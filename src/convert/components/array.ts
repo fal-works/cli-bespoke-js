@@ -1,4 +1,4 @@
-import type { ErrorSender } from "../../types";
+import type { ErrorSender } from "../converter";
 
 /**
  * - Returns the first element of `values`.

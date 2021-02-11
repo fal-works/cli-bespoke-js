@@ -1,4 +1,9 @@
-import type { RawValues, ErrorSender } from "../types";
+import type { RawValues } from "../scan";
+
+/**
+ * Function that handles `error` and performs a nonlocal exit.
+ */
+export type ErrorSender = (error: Error) => never;
 
 /**
  * Function that converts an input `value` to another.
