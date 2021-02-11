@@ -17,8 +17,8 @@ export type Converter<Input, Output> = (
 /**
  * Object containing `Converter` functions. Should be passed to `parse()`.
  */
-export type ConverterRecord<T extends StringRecord> = {
-  readonly [P in keyof T]: Converter<RawValues, T[P]>;
+export type ConverterRecord<Result extends StringRecord> = {
+  readonly [P in keyof Result]: Converter<RawValues, Result[P]>;
 };
 
 /**

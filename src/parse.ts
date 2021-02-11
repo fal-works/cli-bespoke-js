@@ -9,7 +9,7 @@ import { config } from "./common/config.js";
 /**
  * Arguments to be passed to `parse()`.
  */
-export type ParseParams<T extends StringRecord> = {
+export type ParseParams<Result extends StringRecord> = {
   /**
    * Array of arguments.
    * Typically `process.argv.slice(2)` or `anyCommandlineString.split(" ")`.
@@ -27,7 +27,7 @@ export type ParseParams<T extends StringRecord> = {
    * Use `flag` (which is a special `Converter`) for options that do not
    * receive values.
    */
-  convert: ConverterRecord<T>;
+  convert: ConverterRecord<Result>;
 
   /**
    * Object whose keys are option names and whose values are alias names.
@@ -41,13 +41,15 @@ export type ParseParams<T extends StringRecord> = {
  * Returns an object containg parameters (`_`) and options that are typed and
  * validated.
  */
-export const parse = <T extends StringRecord>(params: ParseParams<T>): T => {
+export const parse = <Result extends StringRecord>(
+  params: ParseParams<Result>
+): Result => {
   const { args, convert, alias = {} } = params;
 
   const isFlag = (optionName: string) => convert[optionName] === flag;
   const normalizeOptionName = createAliasMapFunction(alias);
   const rawData = scan(args, isFlag, normalizeOptionName);
-  const result: Partial<T> = {};
+  const result: Partial<Result> = {};
 
   for (const optionName in convert) {
     const convertValues = convert[optionName];
@@ -57,5 +59,5 @@ export const parse = <T extends StringRecord>(params: ParseParams<T>): T => {
   }
 
   // eslint-disable-next-line total-functions/no-unsafe-type-assertion
-  return result as T;
+  return result as Result;
 };

@@ -13,9 +13,9 @@ export const optional = <Input, Output>(
  * - Returns the given value.
  * - If the given value is `undefined`, returns `defaultValue` instead.
  */
-export const atDefault = <S>(defaultValue: S) => <T>(
+export const atDefault = <DefaultValue>(defaultValue: DefaultValue) => <T>(
   value: T | undefined
-): T | S => (value === undefined ? defaultValue : value);
+): T | DefaultValue => (value === undefined ? defaultValue : value);
 
 /**
  * Raises error if the given value is not included in `candidates`.
