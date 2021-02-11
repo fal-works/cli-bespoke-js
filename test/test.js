@@ -3,7 +3,7 @@ import {
   flag,
   first,
   converters as cv,
-  converterFunctions as cvf,
+  converterFactories as cvf,
 } from "../lib/index.js";
 
 const args = [
