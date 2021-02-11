@@ -20,13 +20,23 @@ const findCharCode = (
   return -1;
 };
 
+type ScanResult = {
+  readonly _: readonly string[];
+  readonly [optionName: string]: readonly string[];
+};
+
+type MutableScanResult = {
+  readonly _: string[];
+  [optionName: string]: string[];
+};
+
 export const scan = (
   args: readonly string[],
   isFlag: (optionName: string) => boolean,
   normalizeOptionName: (name: string) => string
-): Readonly<Record<string, readonly string[]>> => {
+): ScanResult => {
   const parameters: string[] = [];
-  const options: Record<string, string[]> = { _: parameters };
+  const result: MutableScanResult = { _: parameters };
   let currentValueContainer = parameters;
 
   const argsLen = args.length;
@@ -55,12 +65,12 @@ export const scan = (
             // eslint-disable-next-line total-functions/no-unsafe-type-assertion
             parameters.push(args[i] as string);
           }
-          return options;
+          return result;
         }
         // just a short option name
         else {
           const optionName = normalizeOptionName(arg.charAt(1));
-          currentValueContainer = options[optionName] ??= [];
+          currentValueContainer = result[optionName] ??= [];
           continue;
         }
     }
@@ -70,14 +80,14 @@ export const scan = (
       // short option with equal-separated value
       if (arg.charCodeAt(2) === /* equal */ 61) {
         const optionName = normalizeOptionName(arg.charAt(1));
-        addOptionValue(options, optionName, arg.substring(3));
+        addOptionValue(result, optionName, arg.substring(3));
         continue;
       }
 
       // multiple short option names
       for (let i = 1; i < argLen; i += 1) {
         const optionName = normalizeOptionName(arg.charAt(i));
-        options[optionName] ??= [];
+        result[optionName] ??= [];
       }
       continue;
     }
@@ -88,16 +98,16 @@ export const scan = (
       // long option with equal-separated value
       if (equalIndex !== -1) {
         const optionName = normalizeOptionName(arg.substring(2, equalIndex));
-        addOptionValue(options, optionName, arg.substring(equalIndex + 1));
+        addOptionValue(result, optionName, arg.substring(equalIndex + 1));
         continue;
       }
 
       // just a long option name
       const optionName = normalizeOptionName(arg.slice(2));
-      const option = (options[optionName] ??= []);
+      const option = (result[optionName] ??= []);
       if (!isFlag(optionName)) currentValueContainer = option;
     }
   }
 
-  return options;
+  return result;
 };
