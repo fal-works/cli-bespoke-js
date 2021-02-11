@@ -6,11 +6,9 @@ import { createAliasMapFunction } from "./alias.js";
 import { config } from "./config.js";
 
 /**
- * Parses a commandline.
- * Returns an object containg parameters (`_`) and options that are typed and
- * validated.
+ * Arguments to be passed to `parse()`.
  */
-export const parse = <T extends Record<string, unknown>>(params: {
+export type ParseParams<T extends Record<string, unknown>> = {
   /**
    * Array of arguments.
    * Typically `process.argv.slice(2)` or `anyCommandlineString.split(" ")`.
@@ -35,7 +33,16 @@ export const parse = <T extends Record<string, unknown>>(params: {
    * Unlike `convert`, here you do not have to specify all option names.
    */
   alias?: AliasRecord;
-}): T => {
+};
+
+/**
+ * Parses a commandline.
+ * Returns an object containg parameters (`_`) and options that are typed and
+ * validated.
+ */
+export const parse = <T extends Record<string, unknown>>(
+  params: ParseParams<T>
+): T => {
   const { args, convert, alias = {} } = params;
 
   const isFlag = (optionName: string) => convert[optionName] === flag;
