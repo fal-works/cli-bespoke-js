@@ -70,18 +70,13 @@ export const oneOrMore = <Input, Output>(
   };
 };
 
-type MapCallback<Input, Output> = (
-  element: Input,
-  index: number,
-  array: readonly Input[]
-) => Output;
-
 /**
- * Similar to `Array.map()`.
+ * Converts each element of the given array.
  */
 export const map = <Input, Output>(
-  callback: MapCallback<Input, Output>
-): Converter<readonly Input[], Output[]> => (values) => values.map(callback);
+  convert: Converter<Input, Output>
+): Converter<readonly Input[], Output[]> => (values, sendError) =>
+  values.map((value) => convert(value, sendError));
 
 /**
  * Calls `split()` on the given string.
