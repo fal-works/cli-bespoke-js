@@ -1,6 +1,6 @@
 {
   "name": "cli-bespoke",
-  "description": "Validate commandlines in a simple, clean and customizable way.",
+  "description": "Parse and validate commandlines. Simple, well-typed and customizable.",
   "version": "0.1.0",
   "license": "MIT",
   "author": "FAL",
