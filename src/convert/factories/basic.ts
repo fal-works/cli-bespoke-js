@@ -8,8 +8,8 @@ export const optional = <Input, Output>(convert: Converter<Input, Output>) => (
   value === undefined ? undefined : convert(value, sendError);
 
 export const atDefault = <S>(defaultValue: S) => <T>(
-  value: T | null | undefined
-): T | S => value ?? defaultValue;
+  value: T | undefined
+): T | S => (value === undefined ? defaultValue : value);
 
 export const validValues = <T>(candidates: readonly T[]) => (
   value: unknown,

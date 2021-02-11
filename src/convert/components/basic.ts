@@ -4,10 +4,10 @@ import type { Converter } from "../converter";
 export const asIs: Converter<RawValues, RawValues> = (rawValues) => rawValues;
 
 export const required = <T>(
-  value: T | null | undefined,
+  value: T | undefined,
   sendError: ErrorSender
 ): T => {
-  if (value == null) sendError(new Error("Missing value"));
+  if (value === undefined) sendError(new Error("Missing value"));
   return value;
 };
 
