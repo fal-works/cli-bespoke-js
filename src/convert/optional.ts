@@ -1,4 +1,11 @@
 import type { ErrorSender } from "../types";
+import type { Converter } from "../converter";
+
+export const optional = <Input, Output>(convert: Converter<Input, Output>) => (
+  value: Input | undefined,
+  sendError: ErrorSender
+): Output | undefined =>
+  value === undefined ? undefined : convert(value, sendError);
 
 export const required = <T>(
   value: T | null | undefined,
