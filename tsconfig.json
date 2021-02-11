@@ -10,7 +10,6 @@
     "outDir": "lib",
     "isolatedModules": true,
     "declaration": true,
-    "declarationMap": true,
 
     /* Strict Type-Checking Options */
     "strict": true,

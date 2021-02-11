@@ -13,8 +13,7 @@
   },
   "type": "module",
   "files": [
-    "lib",
-    "src"
+    "lib"
   ],
   "main": "lib/index.cjs",
   "module": "lib/index.js",
