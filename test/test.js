@@ -15,14 +15,14 @@ const args = [
   "-valueWithHyphen",
 ];
 
-const result = parse(
+const result = parse({
   args,
-  {
+  convert: {
     foo: flag,
     outfile: first(cv.zeroOrOne).then(cv.atDefault("dist.js")),
     src: cv.asIs,
   },
-  { src: "s" }
-);
+  alias: { src: "s" },
+});
 
 console.log(result);
