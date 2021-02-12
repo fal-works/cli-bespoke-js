@@ -76,7 +76,7 @@ Details about `convert`:
 - Use `flag` for options that do not receive values.
 - All values are `readonly string[] | undefined` before converting.
 - Namespace `converters` provides built-in `Converter`s.
-- Namespace `converterFactories` provieds functions that produces `Converter`s.
+- Namespace `converterFactories` provides functions that produces `Converter`s.
 - You can also use any user-defined converter function.
 - Use `first()`/`then()` for chaining multiple `Converter`s.
 
